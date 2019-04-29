@@ -81,4 +81,13 @@ chrome.webRequest.onBeforeRequest.addListener(
 
 chrome.browserAction.onClicked.addListener(function (/*tab*/) {
 	reloadExtensions();
+	chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
+		toReload = tabs[0].id;
+		console.log(tabs[0].url);
+		chrome.storage.sync.get("reloadPage", function (item) {
+			if (item.reloadPage && toReload) {
+				chrome.tabs.reload(toReload);
+			}
+		});
+	});
 });
